@@ -1,1 +1,1 @@
-Sample code from developer tools and runtimes blog 
+Sample code from developer tools and runtimes blogs 
