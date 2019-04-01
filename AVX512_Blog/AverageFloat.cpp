@@ -43,33 +43,33 @@ static float a[length];
 static float scalarAverage() {
     preventOptimize++;
     float sum = 0.0;
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < _countof(a); i++) {
         sum += a[i];
     }
-    return sum / length;
+    return sum / _countof(a);
 }
 
 __declspec(noinline) static float avxAverage() {
     preventOptimize++;
     __m256 sumx8 = _mm256_setzero_ps();
-    for (int i = 0; i < length; i = i + 8) {
+    for (int i = 0; i < _countof(a); i = i + 8) {
         sumx8 = _mm256_add_ps(sumx8, _mm256_loadu_ps(&(a[i])));
     }
     float sum = sumx8.m256_f32[0] + sumx8.m256_f32[1] +
         sumx8.m256_f32[2] + sumx8.m256_f32[3] +
         sumx8.m256_f32[4] + sumx8.m256_f32[5] +
         sumx8.m256_f32[6] + sumx8.m256_f32[7];
-    return sum / length;
+    return sum / _countof(a);
 }
 
 __declspec(noinline) static float avx512Average() {
     preventOptimize++;
     __m512 sumx16 = _mm512_setzero_ps();
-    for (int i = 0; i < length; i = i + 16) {
+    for (int i = 0; i < _countof(a); i = i + 16) {
         sumx16 = _mm512_add_ps(sumx16, _mm512_loadu_ps(&(a[i])));
     }
     float sum = _mm512_reduce_add_ps(sumx16);
-    return sum / length;
+    return sum / _countof(a);
 }
 
 static bool sanityCheck() {
